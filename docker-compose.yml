@@ -1,0 +1,98 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-pubmed}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pubmed}
+      POSTGRES_DB: ${POSTGRES_DB:-pubmed_pipeline}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-pubmed}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  dagster-user-code:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: user-code
+    environment:
+      DAGSTER_POSTGRES_USER: ${POSTGRES_USER:-pubmed}
+      DAGSTER_POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pubmed}
+      DAGSTER_POSTGRES_DB: ${POSTGRES_DB:-pubmed_pipeline}
+      DAGSTER_POSTGRES_HOST: postgres
+      DAGSTER_POSTGRES_PORT: 5432
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-pubmed}:${POSTGRES_PASSWORD:-pubmed}@postgres:5432/${POSTGRES_DB:-pubmed_pipeline}
+      PYTHONPATH: /app/src
+    volumes:
+      - ./src:/app/src
+      - pubmed_data:/app/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  dagster-webserver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dagster-base
+    command: dagster-webserver -h 0.0.0.0 -p 3000 -w /app/workspace.yaml
+    environment:
+      DAGSTER_POSTGRES_USER: ${POSTGRES_USER:-pubmed}
+      DAGSTER_POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pubmed}
+      DAGSTER_POSTGRES_DB: ${POSTGRES_DB:-pubmed_pipeline}
+      DAGSTER_POSTGRES_HOST: postgres
+      DAGSTER_POSTGRES_PORT: 5432
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./workspace.yaml:/app/workspace.yaml
+    depends_on:
+      postgres:
+        condition: service_healthy
+      dagster-user-code:
+        condition: service_started
+
+  dagster-daemon:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dagster-base
+    command: dagster-daemon run -w /app/workspace.yaml
+    environment:
+      DAGSTER_POSTGRES_USER: ${POSTGRES_USER:-pubmed}
+      DAGSTER_POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pubmed}
+      DAGSTER_POSTGRES_DB: ${POSTGRES_DB:-pubmed_pipeline}
+      DAGSTER_POSTGRES_HOST: postgres
+      DAGSTER_POSTGRES_PORT: 5432
+    volumes:
+      - ./workspace.yaml:/app/workspace.yaml
+    depends_on:
+      postgres:
+        condition: service_healthy
+      dagster-user-code:
+        condition: service_started
+
+  streamlit:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: streamlit
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-pubmed}:${POSTGRES_PASSWORD:-pubmed}@postgres:5432/${POSTGRES_DB:-pubmed_pipeline}
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./src:/app/src
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  pubmed_data:

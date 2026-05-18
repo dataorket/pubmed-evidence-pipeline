@@ -1,0 +1,21 @@
+storage:
+  postgres:
+    postgres_db:
+      db_name:
+        env: DAGSTER_POSTGRES_DB
+      hostname:
+        env: DAGSTER_POSTGRES_HOST
+      username:
+        env: DAGSTER_POSTGRES_USER
+      password:
+        env: DAGSTER_POSTGRES_PASSWORD
+      port:
+        env: DAGSTER_POSTGRES_PORT
+
+run_launcher:
+  module: dagster.core.launcher
+  class: DefaultRunLauncher
+
+run_coordinator:
+  module: dagster.core.run_coordinator
+  class: QueuedRunCoordinator
