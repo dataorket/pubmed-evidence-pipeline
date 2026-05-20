@@ -11,11 +11,3 @@ storage:
         env: DAGSTER_POSTGRES_PASSWORD
       port:
         env: DAGSTER_POSTGRES_PORT
-
-run_launcher:
-  module: dagster.core.launcher
-  class: DefaultRunLauncher
-
-run_coordinator:
-  module: dagster.core.run_coordinator
-  class: QueuedRunCoordinator

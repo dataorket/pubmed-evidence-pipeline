@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-import os
-
-from dagster import DynamicPartitionsDefinition, StaticPartitionsDefinition
+from dagster import DynamicPartitionsDefinition
 
 # Each partition key = one baseline file number (e.g. "1138", "1137", ...)
 # Populated dynamically as files are discovered

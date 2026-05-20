@@ -1,3 +1,11 @@
+from src.models.analytics import (
+    FundingRow,
+    GeographyRow,
+    KnowledgeGraphTriple,
+    MeshCooccurrenceRow,
+    PublicationTrendRow,
+    TreatmentOutcomeRow,
+)
 from src.models.article import (
     Author,
     EffectDirection,
@@ -7,14 +15,6 @@ from src.models.article import (
     PubMedArticle,
     StudyDesign,
     TreatmentOutcome,
-)
-from src.models.analytics import (
-    FundingRow,
-    GeographyRow,
-    KnowledgeGraphTriple,
-    MeshCooccurrenceRow,
-    PublicationTrendRow,
-    TreatmentOutcomeRow,
 )
 
 __all__ = [

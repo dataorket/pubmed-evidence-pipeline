@@ -22,6 +22,10 @@ data/
 # Dagster
 .dagster/
 dagster_home/
+.telemetry/
+.tmp_dagster_home*/
+storage/
+logs/
 
 # Testing
 .pytest_cache/

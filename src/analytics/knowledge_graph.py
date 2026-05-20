@@ -27,4 +27,6 @@ def build_knowledge_graph(session: Session) -> dict:
                 population=pop_label,
                 pubmed_id=row.pubmed_id,
             )
-    return nx.node_link_data(G)
+    data = nx.node_link_data(G)
+    data["links"] = data.pop("edges", data.get("links", []))
+    return data

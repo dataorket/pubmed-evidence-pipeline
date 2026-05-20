@@ -4,7 +4,7 @@ from collections import defaultdict
 
 from sqlalchemy.orm import Session
 
-from src.db.models import LlmExtraction, PubmedArticle
+from src.db.models import LlmExtraction
 
 
 def build_treatment_outcome_matrix(session: Session) -> list[dict]:

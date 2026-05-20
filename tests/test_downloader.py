@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from unittest.mock import MagicMock, patch
 from pathlib import Path
 
 from src.ingest.downloader import baseline_file_name, verify_md5

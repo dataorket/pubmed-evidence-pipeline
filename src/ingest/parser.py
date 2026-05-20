@@ -1,12 +1,56 @@
 from __future__ import annotations
 
+import re
+from collections.abc import Iterator
 from datetime import date
 from pathlib import Path
-from typing import Iterator
 
 from lxml import etree
 
 from src.models import Author, Grant, PubMedArticle
+
+_COUNTRIES = {
+    "usa", "united states", "u.s.a.", "uk", "united kingdom", "germany", "france",
+    "italy", "spain", "japan", "china", "canada", "australia", "netherlands",
+    "sweden", "norway", "denmark", "finland", "switzerland", "austria", "belgium",
+    "brazil", "india", "south korea", "korea", "turkey", "israel", "iran",
+    "greece", "portugal", "poland", "czech republic", "hungary", "russia",
+    "egypt", "nigeria", "south africa", "mexico", "argentina", "colombia",
+    "taiwan", "singapore", "new zealand", "ireland", "scotland", "england",
+    "wales", "thailand", "malaysia", "indonesia", "pakistan", "bangladesh",
+}
+
+_COUNTRY_ALIASES = {
+    "usa": "United States",
+    "u.s.a.": "United States",
+    "united states": "United States",
+    "uk": "United Kingdom",
+    "united kingdom": "United Kingdom",
+    "england": "United Kingdom",
+    "scotland": "United Kingdom",
+    "wales": "United Kingdom",
+    "south korea": "South Korea",
+    "korea": "South Korea",
+    "czech republic": "Czech Republic",
+    "iran": "Iran",
+    "russia": "Russia",
+}
+
+def _extract_country(affiliation: str | None) -> str | None:
+    if not affiliation:
+        return None
+    parts = [p.strip().rstrip(".") for p in affiliation.split(",")]
+    for part in reversed(parts):
+        normalized = part.lower().strip()
+        if normalized in _COUNTRY_ALIASES:
+            return _COUNTRY_ALIASES[normalized]
+        if normalized in _COUNTRIES:
+            return part.title()
+        for country in _COUNTRIES:
+            if re.search(r'\b' + re.escape(country) + r'\b', normalized):
+                alias_key = country.lower()
+                return _COUNTRY_ALIASES.get(alias_key, country.title())
+    return None
 
 
 def _text(element: etree._Element, xpath: str) -> str | None:
@@ -48,7 +92,7 @@ def _parse_authors(article: etree._Element) -> list[Author]:
                 last_name=author.findtext("LastName"),
                 fore_name=author.findtext("ForeName"),
                 affiliation=affiliation,
-                country=None,
+                country=_extract_country(affiliation),
             )
         )
     return authors

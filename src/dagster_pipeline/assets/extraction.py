@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-import os
-
-from dagster import AssetExecutionContext, MaterializeResult, asset
+from dagster import MaterializeResult, asset
 
 from src.dagster_pipeline.resources import DatabaseResource, LitellmResource
 from src.db.queries import get_abstracts_without_extraction, upsert_extraction
@@ -15,7 +13,7 @@ from src.llm.extractor import run_extraction
     description="Run LLM extraction on unprocessed abstracts using Gemini via litellm",
 )
 def extracted_treatment_outcomes(
-    context: AssetExecutionContext,
+    context,
     database: DatabaseResource,
     litellm_resource: LitellmResource,
 ) -> MaterializeResult:

@@ -8,7 +8,11 @@ from src.db.models import PubmedArticle
 
 
 def mesh_cooccurrence(session: Session, min_count: int = 3) -> list[dict]:
-    rows = session.query(PubmedArticle.mesh_terms).filter(PubmedArticle.mesh_terms.isnot(None)).all()
+    rows = (
+        session.query(PubmedArticle.mesh_terms)
+        .filter(PubmedArticle.mesh_terms.isnot(None))
+        .all()
+    )
     counts: dict[tuple[str, str], int] = defaultdict(int)
     for (mesh_terms,) in rows:
         terms = sorted({t.lower() for t in (mesh_terms or [])})

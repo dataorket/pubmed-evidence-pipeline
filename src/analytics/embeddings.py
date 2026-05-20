@@ -5,7 +5,7 @@ import os
 import numpy as np
 from sqlalchemy.orm import Session
 
-from src.db.models import LlmExtraction, PubmedArticle
+from src.db.models import PubmedArticle
 
 
 def compute_embeddings(session: Session) -> list[dict]:
@@ -22,7 +22,10 @@ def compute_embeddings(session: Session) -> list[dict]:
     model = os.getenv("GEMINI_EMBEDDING_MODEL", "gemini/text-embedding-004")
     response = litellm.embedding(model=model, input=abstracts)
     vectors = np.array([e["embedding"] for e in response.data], dtype=np.float32)
-    return [{"pubmed_id": pid, "embedding": vec.tolist()} for pid, vec in zip(pubmed_ids, vectors)]
+    return [
+        {"pubmed_id": pid, "embedding": vec.tolist()}
+        for pid, vec in zip(pubmed_ids, vectors, strict=False)
+    ]
 
 
 def cluster_embeddings(embeddings: list[dict]) -> list[dict]:

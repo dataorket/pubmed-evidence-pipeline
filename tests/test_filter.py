@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+from datetime import date
+
 from src.ingest.filter import is_relevant
 from src.models import PubMedArticle
-from datetime import date
 
 
 def _article(**kwargs) -> PubMedArticle:
@@ -38,7 +39,10 @@ def test_matches_keyword_in_abstract():
 
 
 def test_no_match():
-    article = _article(title="Diabetes management in adults", abstract="This study examined insulin therapy.")
+    article = _article(
+        title="Diabetes management in adults",
+        abstract="This study examined insulin therapy.",
+    )
     assert not is_relevant(article)
 
 

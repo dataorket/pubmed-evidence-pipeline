@@ -1,13 +1,9 @@
 from __future__ import annotations
 
 import textwrap
-from io import BytesIO
 from pathlib import Path
 
-import pytest
-
 from src.ingest.parser import parse_xml_file
-
 
 SAMPLE_XML = textwrap.dedent("""\
 <?xml version="1.0" encoding="UTF-8"?>

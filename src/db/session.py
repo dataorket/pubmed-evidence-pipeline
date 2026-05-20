@@ -21,6 +21,10 @@ def get_session_factory(database_url: str | None = None) -> sessionmaker[Session
 def init_db(database_url: str | None = None) -> None:
     engine = get_engine(database_url)
     with engine.connect() as conn:
-        conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
-        conn.commit()
+        try:
+            conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
+            conn.commit()
+        except Exception:
+            # pgvector not available locally — skip silently
+            conn.rollback()
     Base.metadata.create_all(engine)

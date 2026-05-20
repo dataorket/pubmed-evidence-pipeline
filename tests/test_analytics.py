@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from src.analytics.treatment_matrix import build_treatment_outcome_matrix
-from src.analytics.publication_trends import publication_trends
 from unittest.mock import MagicMock
+
+from src.analytics.treatment_matrix import build_treatment_outcome_matrix
 
 
 def _mock_session_with_extractions(treatment_outcomes: list[list[dict]]):

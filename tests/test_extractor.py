@@ -35,7 +35,10 @@ def test_parse_extraction_with_error():
 
 def test_run_extraction_uses_batch(mock_llm_response):
     mock_llm_response["pubmed_id"] = "11111"
-    with patch("src.llm.extractor.extract_treatment_outcomes_batch", return_value=[mock_llm_response]):
+    with patch(
+        "src.llm.extractor.extract_treatment_outcomes_batch",
+        return_value=[mock_llm_response],
+    ):
         results = run_extraction([("11111", "Some abstract text about endometriosis treatment.")])
     assert len(results) == 1
     assert results[0].pubmed_id == "11111"

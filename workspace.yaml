@@ -1,4 +1,4 @@
 load_from:
   - python_module:
-      module_name: dagster_pipeline.definitions
-      working_directory: /app
+      module_name: src.dagster_pipeline.definitions
+      working_directory: .

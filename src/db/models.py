@@ -1,10 +1,7 @@
 from __future__ import annotations
 
-from datetime import datetime
-
 from sqlalchemy import (
     ARRAY,
-    BigInteger,
     Column,
     Date,
     DateTime,
@@ -52,18 +49,25 @@ class PubmedArticle(Base):
 
     authors = relationship("PubmedAuthor", back_populates="article", cascade="all, delete-orphan")
     grants = relationship("PubmedGrant", back_populates="article", cascade="all, delete-orphan")
-    extraction = relationship("LlmExtraction", back_populates="article", uselist=False, cascade="all, delete-orphan")
+    extraction = relationship(
+        "LlmExtraction",
+        back_populates="article",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
 
 
 class PubmedAuthor(Base):
     __tablename__ = "pubmed_author"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    article_id = Column(Integer, ForeignKey("pubmed_article.id", ondelete="CASCADE"), nullable=False)
+    article_id = Column(
+        Integer, ForeignKey("pubmed_article.id", ondelete="CASCADE"), nullable=False
+    )
     last_name = Column(String(255))
     fore_name = Column(String(255))
     affiliation = Column(Text)
-    country = Column(String(100))
+    country = Column(String(255))
 
     article = relationship("PubmedArticle", back_populates="authors")
 
@@ -72,10 +76,12 @@ class PubmedGrant(Base):
     __tablename__ = "pubmed_grant"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    article_id = Column(Integer, ForeignKey("pubmed_article.id", ondelete="CASCADE"), nullable=False)
+    article_id = Column(
+        Integer, ForeignKey("pubmed_article.id", ondelete="CASCADE"), nullable=False
+    )
     grant_id = Column(String(255))
-    agency = Column(String(255))
-    country = Column(String(100))
+    agency = Column(Text)
+    country = Column(String(255))
 
     article = relationship("PubmedArticle", back_populates="grants")
 
@@ -85,7 +91,11 @@ class LlmExtraction(Base):
     __table_args__ = (UniqueConstraint("pubmed_id", name="uq_llm_extraction_pubmed_id"),)
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    pubmed_id = Column(String(20), ForeignKey("pubmed_article.pubmed_id", ondelete="CASCADE"), nullable=False)
+    pubmed_id = Column(
+        String(20),
+        ForeignKey("pubmed_article.pubmed_id", ondelete="CASCADE"),
+        nullable=False,
+    )
     treatments = Column(ARRAY(Text), server_default="{}")
     outcomes = Column(ARRAY(Text), server_default="{}")
     treatment_outcomes = Column(JSONB, server_default="[]")

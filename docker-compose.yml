@@ -10,7 +10,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-pubmed}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-pubmed} -d ${POSTGRES_DB:-pubmed_pipeline}"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -26,57 +26,73 @@ services:
       DAGSTER_POSTGRES_DB: ${POSTGRES_DB:-pubmed_pipeline}
       DAGSTER_POSTGRES_HOST: postgres
       DAGSTER_POSTGRES_PORT: 5432
+      DAGSTER_HOME: /app
       GEMINI_API_KEY: ${GEMINI_API_KEY}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini/gemini-flash-latest}
+      LLM_BATCH_SIZE: ${LLM_BATCH_SIZE:-8}
       DATABASE_URL: postgresql://${POSTGRES_USER:-pubmed}:${POSTGRES_PASSWORD:-pubmed}@postgres:5432/${POSTGRES_DB:-pubmed_pipeline}
-      PYTHONPATH: /app/src
+      PYTHONPATH: /app
+      PARTITION_START: ${PARTITION_START:-1200}
+      PARTITION_END: ${PARTITION_END:-1209}
     volumes:
       - ./src:/app/src
+      - ./dagster.yaml:/app/dagster.yaml
+      - ./seed_partitions.py:/app/seed_partitions.py
       - pubmed_data:/app/data
     depends_on:
       postgres:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "python -c 'import socket; s=socket.socket(); s.settimeout(1); s.connect((\"127.0.0.1\", 4000)); s.close()'"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
 
   dagster-webserver:
     build:
       context: .
       dockerfile: Dockerfile
       target: dagster-base
-    command: dagster-webserver -h 0.0.0.0 -p 3000 -w /app/workspace.yaml
+    command: dagster-webserver -h 0.0.0.0 -p 3000 -w /app/workspace.docker.yaml
     environment:
       DAGSTER_POSTGRES_USER: ${POSTGRES_USER:-pubmed}
       DAGSTER_POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pubmed}
       DAGSTER_POSTGRES_DB: ${POSTGRES_DB:-pubmed_pipeline}
       DAGSTER_POSTGRES_HOST: postgres
       DAGSTER_POSTGRES_PORT: 5432
+      DAGSTER_HOME: /app
     ports:
       - "3000:3000"
     volumes:
-      - ./workspace.yaml:/app/workspace.yaml
+      - ./workspace.docker.yaml:/app/workspace.docker.yaml
+      - ./dagster.yaml:/app/dagster.yaml
     depends_on:
       postgres:
         condition: service_healthy
       dagster-user-code:
-        condition: service_started
+        condition: service_healthy
 
   dagster-daemon:
     build:
       context: .
       dockerfile: Dockerfile
       target: dagster-base
-    command: dagster-daemon run -w /app/workspace.yaml
+    command: dagster-daemon run -w /app/workspace.docker.yaml
     environment:
       DAGSTER_POSTGRES_USER: ${POSTGRES_USER:-pubmed}
       DAGSTER_POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pubmed}
       DAGSTER_POSTGRES_DB: ${POSTGRES_DB:-pubmed_pipeline}
       DAGSTER_POSTGRES_HOST: postgres
       DAGSTER_POSTGRES_PORT: 5432
+      DAGSTER_HOME: /app
     volumes:
-      - ./workspace.yaml:/app/workspace.yaml
+      - ./workspace.docker.yaml:/app/workspace.docker.yaml
+      - ./dagster.yaml:/app/dagster.yaml
     depends_on:
       postgres:
         condition: service_healthy
       dagster-user-code:
-        condition: service_started
+        condition: service_healthy
 
   streamlit:
     build:

@@ -1,5 +1,12 @@
-from src.db.models import Base, PubmedArticle, PubmedAuthor, PubmedGrant, PubmedRaw, LlmExtraction, AnalyticsResult
-from src.db.session import get_engine, get_session_factory, init_db
+from src.db.models import (
+    AnalyticsResult,
+    Base,
+    LlmExtraction,
+    PubmedArticle,
+    PubmedAuthor,
+    PubmedGrant,
+    PubmedRaw,
+)
 from src.db.queries import (
     bulk_upsert_articles,
     file_already_ingested,
@@ -9,6 +16,7 @@ from src.db.queries import (
     upsert_extraction,
     upsert_raw_file,
 )
+from src.db.session import get_engine, get_session_factory, init_db
 
 __all__ = [
     "Base",

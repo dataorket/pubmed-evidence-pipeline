@@ -9,17 +9,17 @@ from src.db.models import PubmedArticle, PubmedAuthor
 
 def research_geography(session: Session) -> list[dict]:
     rows = (
-        session.query(PubmedAuthor.country, PubmedArticle.pub_date)
+        session.query(PubmedAuthor.country, PubmedAuthor.article_id, PubmedArticle.pub_date)
         .join(PubmedArticle, PubmedAuthor.article_id == PubmedArticle.id)
         .filter(PubmedAuthor.country.isnot(None))
         .all()
     )
     by_country: dict[str, dict] = defaultdict(lambda: {"article_ids": set(), "years": []})
-    for country, pub_date in rows:
+    for country, article_id, pub_date in rows:
         c = country.strip()
         if not c:
             continue
-        by_country[c]["article_ids"].add(id)
+        by_country[c]["article_ids"].add(article_id)
         if pub_date:
             by_country[c]["years"].append(pub_date.year)
     return [

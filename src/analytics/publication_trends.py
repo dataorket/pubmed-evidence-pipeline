@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from collections import Counter
-
 from sqlalchemy.orm import Session
 
 from src.db.models import LlmExtraction, PubmedArticle
@@ -18,7 +16,12 @@ def publication_trends(session: Session) -> list[dict]:
     for pub_date, design in rows:
         year = pub_date.year
         if year not in by_year:
-            by_year[year] = {"article_count": 0, "rct_count": 0, "review_count": 0, "case_report_count": 0}
+            by_year[year] = {
+                "article_count": 0,
+                "rct_count": 0,
+                "review_count": 0,
+                "case_report_count": 0,
+            }
         by_year[year]["article_count"] += 1
         if design == "randomized_controlled_trial":
             by_year[year]["rct_count"] += 1

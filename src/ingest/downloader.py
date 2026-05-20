@@ -16,22 +16,22 @@ def _file_url(file_name: str) -> str:
     return f"{PUBMED_FTP_BASE}/{file_name}"
 
 
-@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=2, max=10))
+@retry(stop=stop_after_attempt(5), wait=wait_exponential(multiplier=2, min=4, max=30))
 def download_file(file_name: str) -> Path:
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     dest = DATA_DIR / file_name
     if dest.exists():
         return dest
     url = _file_url(file_name)
-    with httpx.Client(timeout=300) as client:
-        with client.stream("GET", url) as response:
-            response.raise_for_status()
-            with dest.open("wb") as f:
-                for chunk in response.iter_bytes(chunk_size=8192):
-                    f.write(chunk)
+    with httpx.Client(timeout=300) as client, client.stream("GET", url) as response:
+        response.raise_for_status()
+        with dest.open("wb") as f:
+            for chunk in response.iter_bytes(chunk_size=8192):
+                f.write(chunk)
     return dest
 
 
+@retry(stop=stop_after_attempt(5), wait=wait_exponential(multiplier=2, min=4, max=30))
 def fetch_md5(file_name: str) -> str:
     md5_url = _file_url(f"{file_name}.md5")
     with httpx.Client(timeout=30) as client:
@@ -60,15 +60,19 @@ def decompress(file_path: Path) -> Path:
 
 
 def baseline_file_name(number: int) -> str:
-    return f"pubmed25n{number:04d}.xml.gz"
+    return f"pubmed26n{number:04d}.xml.gz"
 
 
 def download_and_verify(file_number: int) -> tuple[Path, str]:
     file_name = baseline_file_name(file_number)
     expected_md5 = fetch_md5(file_name)
-    file_path = download_file(file_name)
-    if not verify_md5(file_path, expected_md5):
+    for attempt in range(3):
+        file_path = download_file(file_name)
+        if verify_md5(file_path, expected_md5):
+            break
+        # Corrupted download — delete and retry
         file_path.unlink(missing_ok=True)
-        raise ValueError(f"MD5 mismatch for {file_name}")
+        if attempt == 2:
+            raise ValueError(f"MD5 mismatch for {file_name} after 3 attempts")
     xml_path = decompress(file_path)
     return xml_path, expected_md5

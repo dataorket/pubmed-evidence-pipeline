@@ -1,7 +1,8 @@
 from __future__ import annotations
 
+import httpx
+from tenacity import RetryError
 from dagster import (
-    AssetExecutionContext,
     MaterializeResult,
     asset,
 )
@@ -23,7 +24,9 @@ from src.ingest.parser import parse_xml_file
     group_name="ingestion",
     description="Download, verify, parse, and filter a PubMed baseline .xml.gz file",
 )
-def filtered_articles(context: AssetExecutionContext, database: DatabaseResource) -> MaterializeResult:
+def filtered_articles(
+    context, database: DatabaseResource
+) -> MaterializeResult:
     file_number = int(context.partition_key)
     file_name = baseline_file_name(file_number)
 
@@ -34,7 +37,11 @@ def filtered_articles(context: AssetExecutionContext, database: DatabaseResource
             return MaterializeResult(metadata={"status": "skipped", "file": file_name})
 
         context.log.info(f"Downloading {file_name}")
-        xml_path, md5 = download_and_verify(file_number)
+        try:
+            xml_path, md5 = download_and_verify(file_number)
+        except (httpx.HTTPStatusError, httpx.RequestError, RetryError) as e:
+            context.log.warning(f"Network error downloading {file_name} — skipping: {e}")
+            return MaterializeResult(metadata={"status": "skipped_network_error", "file": file_name, "error": str(e)})
 
         context.log.info(f"Parsing {xml_path}")
         all_articles = list(parse_xml_file(xml_path, source_file=file_name))
