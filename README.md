@@ -250,27 +250,27 @@ Below are real examples of articles with successful LLM extraction, showing the 
 
 ## Pipeline Orchestration & LLM Extraction Limitations
 
-### Dagster UI: Asset Orchestration & Monitoring
+### Dagster / Streamlit UI: Asset Orchestration & Monitoring
 Below are screenshots illustrating key pipeline and asset orchestration stages in Dagster:
 
 - Asset materialization:
   ![Dagster asset materialization](Screenshot%202026-05-20%20at%2012.41.49.png)
-  *Materialization of a partitioned asset in Dagster, showing successful ingestion of a PubMed XML file.*
-- Asset checks:
+  *Materialization of a partitioned asset in Dagster, showing being/not materialized and successful ingestion of a PubMed XML file.*
+- Publication trends:
   ![Dagster asset checks](Screenshot%202026-05-20%20at%2012.44.48.png)
   *Automated data quality checks running on ingested data, ensuring integrity before analytics or extraction.*
-- Asset dependencies:
+- MeSh network:
   ![Dagster asset dependencies](Screenshot%202026-05-20%20at%2012.45.12.png)
   *Visualization of asset dependencies, showing how ingestion, extraction, and analytics assets are orchestrated.*
-- Asset run success:
+- Research geography:
   ![Dagster asset run success](Screenshot%202026-05-20%20at%2012.45.39.png)
   *A successful asset materialization run, with all steps completed and data available for downstream analytics.*
-- Asset run error (e.g., network or API failure):
+- Treatment outcome matrix:
   ![Dagster asset run error](Screenshot%202026-05-20%20at%2012.45.51.png)
-- Asset run warning (e.g., partial data):
+- Population profile
   ![Dagster asset run warning](Screenshot%202026-05-20%20at%2012.45.58.png)
   *A run with warnings, such as partial data ingestion or recoverable issues, highlighted for review.*
-- Asset run info (e.g., metadata):
+- Funding landscape
   ![Dagster asset run info](Screenshot%202026-05-20%20at%2012.46.23.png)
   *Asset run metadata and logs, providing transparency into pipeline execution and data lineage.*
 
@@ -279,37 +279,7 @@ Below are screenshots illustrating key pipeline and asset orchestration stages i
 ![LLM extraction asset run taking over 10 hours and failing due to Gemini API rate limits](Screenshot%202026-05-20%20at%2012.31.59.png)
 *The `extracted_treatment_outcomes` asset can take over 10 hours or fail due to Gemini API free-tier rate limits (20 requests/day). This is an external limitation, not a pipeline bug. See the [Gemini API quota documentation](https://ai.google.dev/gemini-api/docs/rate-limits) for more details.*
 
-## Results & Limitations
 
-Below are real screenshots from the Streamlit dashboard, each with a caption reflecting the analytics state:
-
-- **Treatment-Outcome Matrix**
-  ![Treatment-Outcome Matrix](Screenshot%202026-05-20%20at%2013.53.01.png)
-  *Shows the matrix of treatments and outcomes. This screenshot demonstrates successful LLM-powered analytics when quota is available. If the Gemini API quota is exceeded, this page will show a rate-limit or no data message.*
-
-- **Publication Trends Over Time**
-  ![Publication Trends](Screenshot%202026-05-20%20at%2012.45.12.png)
-  *Fully materialized: Trends in publication counts over time, highlighting research activity and evidence growth.*
-
-- **MeSH Term Co-occurrence Network**
-  ![MeSH Co-occurrence](Screenshot%202026-05-20%20at%2012.45.39.png)
-  *Fully materialized: Network of MeSH term co-occurrences, revealing thematic clusters in the literature.*
-
-- **Research Geography**
-  ![Research Geography](Screenshot%202026-05-20%20at%2012.45.51.png)
-  *Fully materialized: Geographic distribution of research, mapped by country of publication or funding.*
-
-- **Knowledge Graph**
-  ![Knowledge Graph](Screenshot%202026-05-20%20at%2012.46.23.png)
-  *Shows the extracted treatment-outcome relationships and study designs. If the Gemini API quota is exceeded, this page will show a rate-limit or no data message.*
-
-- **Population Profile**
-  ![Population Profile](Screenshot%202026-05-20%20at%2012.45.58.png)
-  *Shows demographic breakdowns of study populations. If the Gemini API quota is exceeded, this page will show a rate-limit or no data message.*
-
-- **Funding Landscape**
-  ![Funding Landscape](Screenshot%202026-05-20%20at%2012.41.49.png)
-  *Fully materialized: Distribution of funding agencies, countries, and years for endometriosis research articles.*
 
 ## Continuous Integration & Quality Checks
 
