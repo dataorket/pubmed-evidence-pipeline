@@ -357,8 +357,21 @@ mypy src/ tests/
 # Run tests
 pytest
 
-# Run Dagster data quality checks
-python src/dagster_pipeline/checks.py
+# Run Dagster data quality checks (including extra checks for duplicates, nulls, value ranges)
+python src/dagster_pipeline/checks_run_extra.py
+```
+### Additional Data Quality Checks
+
+The pipeline now includes extra data quality checks:
+
+- **No duplicate PubMed IDs:** Ensures all `pubmed_article.pubmed_id` values are unique.
+- **No null titles:** Ensures all articles have a non-null title.
+- **Extraction confidence in [0, 1]:** Ensures all `llm_extraction.extraction_confidence` values are between 0 and 1.
+
+These checks are run alongside the existing checks for extraction failure rate and minimum article volume. All checks can be run locally with:
+
+```bash
+python src/dagster_pipeline/checks_run_extra.py
 ```
 
 

@@ -47,5 +47,5 @@ jobs:
       - name: Run tests
         run: pytest tests/ -q --tb=short
 
-      - name: Run Dagster data quality checks
-        run: python src/dagster_pipeline/checks.py
+      - name: Run Dagster data quality checks (including extra checks)
+        run: python src/dagster_pipeline/checks_run_extra.py
