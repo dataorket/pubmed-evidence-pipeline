@@ -270,16 +270,17 @@ Below are the two key screenshots illustrating pipeline orchestration and LLM ex
 ## Streamlit Dashboard Analytics
 
 
+
 Below are the main analytics pages available in the Streamlit dashboard, each with a corresponding screenshot:
 
-1.1 **Treatment-Outcome Matrix (with data)**
-1.2 **Treatment-Outcome Matrix (no data)**
-2. **Publication Trends**
-3. **MeSH Network**
-4. **Research Geography**
-5. **Knowledge Graph**
-6. **Population Profile**
-7. **Funding Landscape**
+- 1.1 Treatment-Outcome Matrix (with data)
+- 1.2 Treatment-Outcome Matrix (no data)
+- 2. Publication Trends
+- 3. MeSH Network
+- 4. Research Geography
+- 5. Knowledge Graph
+- 6. Population Profile
+- 7. Funding Landscape
 
 Screenshots for each page are shown below.
 
