@@ -10,7 +10,7 @@ def build_knowledge_graph(session: Session) -> dict:
     rows = session.query(LlmExtraction).filter(LlmExtraction.extraction_error.is_(None)).all()
     G = nx.DiGraph()
     for row in rows:
-        population = row.population or {}
+        population: dict = row.population or {}
         pop_label = population.get("disease_stage") or population.get("sex") or "general"
         for to in (row.treatment_outcomes or []):
             treatment = to.get("treatment", "").lower()

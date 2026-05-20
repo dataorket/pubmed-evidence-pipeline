@@ -15,7 +15,7 @@ def patient_population_profile(session: Session) -> list[dict]:
     severity_counts: dict[str, int] = defaultdict(int)
 
     for row in rows:
-        pop = row.population or {}
+        pop: dict = row.population or {}
         age = (pop.get("age_group") or "").strip().lower()
         if age:
             age_counts[age] += 1

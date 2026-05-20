@@ -42,8 +42,8 @@ class PubmedArticle(Base):
     journal = Column(String(512))
     pub_date = Column(Date)
     language = Column(String(10))
-    publication_types = Column(ARRAY(Text), server_default="{}")
-    mesh_terms = Column(ARRAY(Text), server_default="{}")
+    publication_types: Mapped[list[str]] = Column(ARRAY(Text), server_default="{}")
+    mesh_terms: Mapped[list[str]] = Column(ARRAY(Text), server_default="{}")
     source_file = Column(String(255), nullable=False)
     ingestion_ts = Column(DateTime, server_default=func.now())
 
@@ -96,8 +96,8 @@ class LlmExtraction(Base):
         ForeignKey("pubmed_article.pubmed_id", ondelete="CASCADE"),
         nullable=False,
     )
-    treatments = Column(ARRAY(Text), server_default="{}")
-    outcomes = Column(ARRAY(Text), server_default="{}")
+    treatments: Mapped[list[str]] = Column(ARRAY(Text), server_default="{}")
+    outcomes: Mapped[list[str]] = Column(ARRAY(Text), server_default="{}")
     treatment_outcomes = Column(JSONB, server_default="[]")
     study_design = Column(String(50), default="unknown")
     population = Column(JSONB, server_default="{}")

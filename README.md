@@ -275,15 +275,51 @@ Below are screenshots illustrating key pipeline and asset orchestration stages i
      ![Dagster asset run info](Screenshot%202026-05-20%20at%2012.46.23.png)
 
 
+
 ## Streamlit Dashboard Analytics
 
-Below are screenshots of the interactive Streamlit dashboard for analytics and evidence exploration:
+Below are the main analytics pages available in the Streamlit dashboard, each with a corresponding screenshot:
 
-- **Treatment-Outcome Matrix (with data, quota available)**
-     ![Treatment-Outcome Matrix with data](Screenshot%202026-05-20%20at%2013.53.01.png)
+1. **Publication Trends**
+2. **Treatment-Outcome Matrix**
+3. **Knowledge Graph**
+4. **Research Geography**
+5. **MeSH Network**
+6. **Study Design Trends**
+7. **Funding Landscape**
 
-- **Treatment-Outcome Matrix (no data, quota hit or not run)**
-     ![Treatment-Outcome Matrix with no data](../Desktop/Screenshot%202026-05-20%20at%2012.44.36.png)
+
+Screenshots for each page are shown below.
+
+**1. Publication Trends**
+<!-- Add the correct screenshot filename here -->
+![Publication Trends](Screenshot%202026-05-20%20at%2012.44.48.png)
+
+**2. Treatment-Outcome Matrix (with data)**
+![Treatment-Outcome Matrix with data](Screenshot%202026-05-20%20at%2013.53.01.png)
+
+**2b. Treatment-Outcome Matrix (no data)**
+![Treatment-Outcome Matrix with no data](Screenshot%202026-05-20%20at%2012.44.36.png)
+
+**3. Knowledge Graph**
+<!-- Add the correct screenshot filename here -->
+![Knowledge Graph](Screenshot%202026-05-20%20at%2012.45.12.png)
+
+**4. Research Geography**
+<!-- Add the correct screenshot filename here -->
+![Research Geography](Screenshot%202026-05-20%20at%2012.45.39.png)
+
+**5. MeSH Network**
+<!-- Add the correct screenshot filename here -->
+![MeSH Network](Screenshot%202026-05-20%20at%2012.45.12.png)
+
+**6. Study Design Trends**
+<!-- Add the correct screenshot filename here -->
+<!-- Screenshot missing or not yet provided -->
+
+**7. Funding Landscape**
+<!-- Add the correct screenshot filename here -->
+<!-- Screenshot missing or not yet provided -->
 
 ## Continuous Integration & Quality Checks
 
