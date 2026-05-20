@@ -15,6 +15,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import DeclarativeBase, Mapped, relationship
+from sqlalchemy.orm import mapped_column
 
 
 class Base(DeclarativeBase):
