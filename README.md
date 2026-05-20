@@ -329,7 +329,7 @@ _Analyzes funding sources and patterns, highlighting the organizations and grant
   *This screenshot demonstrates the Treatment-Outcome Matrix fully populated, showing successful LLM-powered analytics when the Gemini API quota was available. Everything was working perfectly during this run (yesterday).* 
 
 - **Treatment-Outcome Matrix (no data, quota hit or not run)**
-  ![Treatment-Outcome Matrix with no data](../Desktop/Screenshot%202026-05-20%20at%2012.44.36.png)
+     ![Treatment-Outcome Matrix with no data](Screenshot%202026-05-20%20at%2012.44.36.png)
   *This screenshot shows the dashboard state with no data, which can occur if the pipeline hasn't run yet or if the Gemini API quota has been hit (as happened today). The dashboard prompts the user to run the pipeline to generate results.*
 
 ## Continuous Integration & Quality Checks
