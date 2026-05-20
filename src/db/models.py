@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from sqlalchemy import (
     ARRAY,
-    Column,
     Date,
     DateTime,
     Float,
@@ -14,8 +13,7 @@ from sqlalchemy import (
     func,
 )
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.orm import DeclarativeBase, Mapped, relationship
-from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
 class Base(DeclarativeBase):
@@ -62,7 +60,11 @@ class PubmedAuthor(Base):
     __tablename__ = "pubmed_author"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    article_id: Mapped[int] = mapped_column(Integer, ForeignKey("pubmed_article.id", ondelete="CASCADE"), nullable=False)
+    article_id: Mapped[int] = mapped_column(
+        Integer,
+        ForeignKey("pubmed_article.id", ondelete="CASCADE"),
+        nullable=False,
+    )
     last_name: Mapped[str | None] = mapped_column(String(255))
     fore_name: Mapped[str | None] = mapped_column(String(255))
     affiliation: Mapped[str | None] = mapped_column(Text)
@@ -75,7 +77,11 @@ class PubmedGrant(Base):
     __tablename__ = "pubmed_grant"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    article_id: Mapped[int] = mapped_column(Integer, ForeignKey("pubmed_article.id", ondelete="CASCADE"), nullable=False)
+    article_id: Mapped[int] = mapped_column(
+        Integer,
+        ForeignKey("pubmed_article.id", ondelete="CASCADE"),
+        nullable=False,
+    )
     grant_id: Mapped[str | None] = mapped_column(String(255))
     agency: Mapped[str | None] = mapped_column(Text)
     country: Mapped[str | None] = mapped_column(String(255))
@@ -88,7 +94,11 @@ class LlmExtraction(Base):
     __table_args__ = (UniqueConstraint("pubmed_id", name="uq_llm_extraction_pubmed_id"),)
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    pubmed_id: Mapped[str] = mapped_column(String(20), ForeignKey("pubmed_article.pubmed_id", ondelete="CASCADE"), nullable=False)
+    pubmed_id: Mapped[str] = mapped_column(
+        String(20),
+        ForeignKey("pubmed_article.pubmed_id", ondelete="CASCADE"),
+        nullable=False,
+    )
     treatments: Mapped[list[str]] = mapped_column(ARRAY(Text), server_default="{}")
     outcomes: Mapped[list[str]] = mapped_column(ARRAY(Text), server_default="{}")
     treatment_outcomes: Mapped[list[dict]] = mapped_column(JSONB, server_default="[]")
