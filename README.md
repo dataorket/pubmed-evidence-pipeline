@@ -321,6 +321,14 @@ Screenshots for each page are shown below.
 <!-- Add the correct screenshot filename here -->
 <!-- Screenshot missing or not yet provided -->
 
+- **Treatment-Outcome Matrix (with data, quota available)**
+  ![Treatment-Outcome Matrix with data](Screenshot%202026-05-20%20at%2013.53.01.png)
+  *This screenshot demonstrates the Treatment-Outcome Matrix fully populated, showing successful LLM-powered analytics when the Gemini API quota was available. Everything was working perfectly during this run (yesterday).* 
+
+- **Treatment-Outcome Matrix (no data, quota hit or not run)**
+  ![Treatment-Outcome Matrix with no data](../Desktop/Screenshot%202026-05-20%20at%2012.44.36.png)
+  *This screenshot shows the dashboard state with no data, which can occur if the pipeline hasn't run yet or if the Gemini API quota has been hit (as happened today). The dashboard prompts the user to run the pipeline to generate results.*
+
 ## Continuous Integration & Quality Checks
 
 This project uses GitHub Actions for continuous integration (CI) to ensure code quality and reliability. On every push and pull request to `main`, the following checks are automatically run:
