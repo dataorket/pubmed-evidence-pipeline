@@ -120,5 +120,5 @@ class AnalyticsResult(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String(255), nullable=False)
-    payload: Mapped[dict] = mapped_column(JSONB, nullable=False)
+    payload: Mapped[list | dict] = mapped_column(JSONB, nullable=False)
     generated_ts: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now())
