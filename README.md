@@ -267,7 +267,6 @@ Below are screenshots illustrating key pipeline and asset orchestration stages i
   *A successful asset materialization run, with all steps completed and data available for downstream analytics.*
 - Asset run error (e.g., network or API failure):
   ![Dagster asset run error](Screenshot%202026-05-20%20at%2012.45.51.png)
-  *Example of a failed asset run due to network or API error, with error details for debugging.*
 - Asset run warning (e.g., partial data):
   ![Dagster asset run warning](Screenshot%202026-05-20%20at%2012.45.58.png)
   *A run with warnings, such as partial data ingestion or recoverable issues, highlighted for review.*
@@ -280,16 +279,37 @@ Below are screenshots illustrating key pipeline and asset orchestration stages i
 ![LLM extraction asset run taking over 10 hours and failing due to Gemini API rate limits](Screenshot%202026-05-20%20at%2012.31.59.png)
 *The `extracted_treatment_outcomes` asset can take over 10 hours or fail due to Gemini API free-tier rate limits (20 requests/day). This is an external limitation, not a pipeline bug. See the [Gemini API quota documentation](https://ai.google.dev/gemini-api/docs/rate-limits) for more details.*
 
-## Streamlit Dashboard Analytics
+## Results & Limitations
 
-Below is a screenshot of the interactive Streamlit dashboard for analytics and evidence exploration:
+Below are real screenshots from the Streamlit dashboard, each with a caption reflecting the analytics state:
 
-- **With data loaded (LLM extraction succeeded, within free-tier quota):**
-  ![Streamlit dashboard analytics](Screenshot%202026-05-20%20at%2013.53.01.png)
-  *This page shows real analytics results, including treatment-outcome pairs, study design trends, and evidence maps for endometriosis, as produced by the pipeline. These results are only available if LLM extraction completes successfully and the Gemini API free-tier quota is not exceeded.*
+- **Treatment-Outcome Matrix**
+  ![Treatment-Outcome Matrix](Screenshot%202026-05-20%20at%2013.53.01.png)
+  *Shows the matrix of treatments and outcomes. This screenshot demonstrates successful LLM-powered analytics when quota is available. If the Gemini API quota is exceeded, this page will show a rate-limit or no data message.*
 
-- **Without data (LLM extraction failed or quota exceeded):**
-  *If the Gemini API free-tier quota is exceeded or LLM extraction fails, the dashboard will prompt you to ingest and materialize assets first, and analytics will not be available. Add a screenshot here if available.*
+- **Publication Trends Over Time**
+  ![Publication Trends](Screenshot%202026-05-20%20at%2012.45.12.png)
+  *Fully materialized: Trends in publication counts over time, highlighting research activity and evidence growth.*
+
+- **MeSH Term Co-occurrence Network**
+  ![MeSH Co-occurrence](Screenshot%202026-05-20%20at%2012.45.39.png)
+  *Fully materialized: Network of MeSH term co-occurrences, revealing thematic clusters in the literature.*
+
+- **Research Geography**
+  ![Research Geography](Screenshot%202026-05-20%20at%2012.45.51.png)
+  *Fully materialized: Geographic distribution of research, mapped by country of publication or funding.*
+
+- **Knowledge Graph**
+  ![Knowledge Graph](Screenshot%202026-05-20%20at%2012.46.23.png)
+  *Shows the extracted treatment-outcome relationships and study designs. If the Gemini API quota is exceeded, this page will show a rate-limit or no data message.*
+
+- **Population Profile**
+  ![Population Profile](Screenshot%202026-05-20%20at%2012.45.58.png)
+  *Shows demographic breakdowns of study populations. If the Gemini API quota is exceeded, this page will show a rate-limit or no data message.*
+
+- **Funding Landscape**
+  ![Funding Landscape](Screenshot%202026-05-20%20at%2012.41.49.png)
+  *Fully materialized: Distribution of funding agencies, countries, and years for endometriosis research articles.*
 
 ## Continuous Integration & Quality Checks
 
