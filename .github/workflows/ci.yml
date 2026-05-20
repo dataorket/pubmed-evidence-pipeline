@@ -7,8 +7,23 @@ on:
     branches: [main]
 
 jobs:
+
   lint-and-test:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres" --health-interval=10s --health-timeout=5s --health-retries=5
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
+      DAGSTER_HOME: ${{ github.workspace }}/.dagster_home
     steps:
       - uses: actions/checkout@v4
 
@@ -21,7 +36,7 @@ jobs:
         run: pip install uv
 
       - name: Install dependencies
-        run: uv pip install --system ".[dev]"
+        run: uv pip install --system ".[dev]" || pip install -r requirements.txt
 
       - name: Ruff lint
         run: ruff check src/ tests/
@@ -31,3 +46,6 @@ jobs:
 
       - name: Run tests
         run: pytest tests/ -q --tb=short
+
+      - name: Run Dagster data quality checks
+        run: python src/dagster_pipeline/checks.py
