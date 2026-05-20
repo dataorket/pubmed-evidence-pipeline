@@ -253,26 +253,7 @@ Below are real examples of articles with successful LLM extraction, showing the 
 ### Dagster / Streamlit UI: Asset Orchestration & Monitoring
 
 
-Below are screenshots illustrating key pipeline and asset orchestration stages in Dagster:
-
-![LLM extraction asset run taking over 10 hours and failing due to Gemini API rate limits](Screenshot%202026-05-20%20at%2012.31.59.png)
-
 *The `extracted_treatment_outcomes` asset can take over 10 hours or fail due to Gemini API free-tier rate limits (20 requests/day). This is an external limitation, not a pipeline bug. See the [Gemini API quota documentation](https://ai.google.dev/gemini-api/docs/rate-limits) for more details.*
-
-- Asset materialization:
-  ![Dagster asset materialization](Screenshot%202026-05-20%20at%2012.41.49.png)
-- Publication trends:
-     ![Dagster asset checks](Screenshot%202026-05-20%20at%2012.44.48.png)
-
-- MeSh network:
-  ![Dagster asset dependencies](Screenshot%202026-05-20%20at%2012.45.12.png)
-- Research geography:
-  ![Dagster asset run success](Screenshot%202026-05-20%20at%2012.45.39.png)
-- Knowledge graph:
-     ![Dagster asset run error](Screenshot%202026-05-20%20at%2012.45.51.png)
-
-     ![Dagster asset run warning](Screenshot%202026-05-20%20at%2012.45.58.png)
-     ![Dagster asset run info](Screenshot%202026-05-20%20at%2012.46.23.png)
 
 
 
@@ -373,6 +354,22 @@ These checks are run alongside the existing checks for extraction failure rate a
 ```bash
 python src/dagster_pipeline/checks_run_extra.py
 ```
+
+### CI/CD Validation Example
+
+Below is a screenshot of the GitHub Actions CI/CD pipeline, showing successful and failed runs for data quality and code checks:
+
+![CI/CD Actions Run Example](Screenshot%202026-05-20%20at%2022.49.53.png)
+
+**What is tested:**
+- No duplicate PubMed IDs (`pubmed_article.pubmed_id` uniqueness)
+- No null titles in articles
+- Extraction confidence in [0, 1] for all LLM extractions
+- Extraction failure rate below 20%
+- Minimum article volume (at least 500)
+- Linting (Ruff), type checking (mypy), and all tests (pytest)
+
+These checks are enforced automatically on every push and pull request via GitHub Actions, ensuring robust data quality and code reliability.
 
 
 
