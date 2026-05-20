@@ -248,31 +248,40 @@ Below are real examples of articles with successful LLM extraction, showing the 
 }
 ```
 
-## Pipeline Orchestration: Dagster UI
+## Pipeline Orchestration & LLM Extraction Limitations
 
+### Dagster UI: Asset Orchestration & Monitoring
 Below are screenshots illustrating key pipeline and asset orchestration stages in Dagster:
 
-![Dagster asset materialization](Screenshot%202026-05-20%20at%2012.41.49.png)
-![Dagster asset checks](Screenshot%202026-05-20%20at%2012.44.48.png)
-![Dagster asset dependencies](Screenshot%202026-05-20%20at%2012.45.12.png)
-![Dagster asset run success](Screenshot%202026-05-20%20at%2012.45.39.png)
-![Dagster asset run error](Screenshot%202026-05-20%20at%2012.45.51.png)
-![Dagster asset run warning](Screenshot%202026-05-20%20at%2012.45.58.png)
-![Dagster asset run info](Screenshot%202026-05-20%20at%2012.46.23.png)
-
-## Streamlit Dashboard Analytics
-
-Below is a screenshot of the interactive Streamlit dashboard for analytics and evidence exploration:
-
-![Streamlit dashboard analytics](Screenshot%202026-05-20%20at%2013.53.01.png)
-
-## Known Issues & Next Steps
+- Asset materialization:
+  ![Dagster asset materialization](Screenshot%202026-05-20%20at%2012.41.49.png)
+- Asset checks:
+  ![Dagster asset checks](Screenshot%202026-05-20%20at%2012.44.48.png)
+- Asset dependencies:
+  ![Dagster asset dependencies](Screenshot%202026-05-20%20at%2012.45.12.png)
+- Asset run success:
+  ![Dagster asset run success](Screenshot%202026-05-20%20at%2012.45.39.png)
+- Asset run error (e.g., network or API failure):
+  ![Dagster asset run error](Screenshot%202026-05-20%20at%2012.45.51.png)
+- Asset run warning (e.g., partial data):
+  ![Dagster asset run warning](Screenshot%202026-05-20%20at%2012.45.58.png)
+- Asset run info (e.g., metadata):
+  ![Dagster asset run info](Screenshot%202026-05-20%20at%2012.46.23.png)
 
 ### Example: LLM Extraction Rate Limit and Long Run
 
 ![LLM extraction asset run taking over 10 hours and failing due to Gemini API rate limits](Screenshot%202026-05-20%20at%2012.31.59.png)
 
 *The `extracted_treatment_outcomes` asset can take over 10 hours or fail due to Gemini API free-tier rate limits (20 requests/day). This is an external limitation, not a pipeline bug. See the [Gemini API quota documentation](https://ai.google.dev/gemini-api/docs/rate-limits) for more details.*
+
+## Streamlit Dashboard Analytics
+
+Below is a screenshot of the interactive Streamlit dashboard for analytics and evidence exploration:
+
+- With data loaded:
+  ![Streamlit dashboard analytics](Screenshot%202026-05-20%20at%2013.53.01.png)
+- Without data (dashboard will prompt to ingest and materialize assets first):
+  *(Add a screenshot here if available)*
 
 ## Continuous Integration & Quality Checks
 

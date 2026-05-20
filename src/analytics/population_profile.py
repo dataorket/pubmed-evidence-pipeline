@@ -31,14 +31,29 @@ def patient_population_profile(session: Session) -> list[dict]:
     return [
         {
             "dimension": "age_group",
-            "values": [{"label": k, "count": v} for k, v in sorted(age_counts.items(), key=lambda x: -x[1])],
+            "values": [
+                {"label": k, "count": v}
+                for k, v in sorted(
+                    age_counts.items(), key=lambda x: -x[1]
+                )
+            ],
         },
         {
             "dimension": "sex",
-            "values": [{"label": k, "count": v} for k, v in sorted(sex_counts.items(), key=lambda x: -x[1])],
+            "values": [
+                {"label": k, "count": v}
+                for k, v in sorted(
+                    sex_counts.items(), key=lambda x: -x[1]
+                )
+            ],
         },
         {
             "dimension": "disease_severity",
-            "values": [{"label": k, "count": v} for k, v in sorted(severity_counts.items(), key=lambda x: -x[1])],
+            "values": [
+                {"label": k, "count": v}
+                for k, v in sorted(
+                    severity_counts.items(), key=lambda x: -x[1]
+                )
+            ],
         },
     ]

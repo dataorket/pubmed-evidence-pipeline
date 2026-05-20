@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 import httpx
-from tenacity import RetryError
 from dagster import (
     MaterializeResult,
     asset,
 )
+from tenacity import RetryError
 
 from src.dagster_pipeline.partitions import baseline_file_partitions
 from src.dagster_pipeline.resources import DatabaseResource
@@ -38,10 +38,17 @@ def filtered_articles(
 
         context.log.info(f"Downloading {file_name}")
         try:
+
             xml_path, md5 = download_and_verify(file_number)
         except (httpx.HTTPStatusError, httpx.RequestError, RetryError) as e:
             context.log.warning(f"Network error downloading {file_name} — skipping: {e}")
-            return MaterializeResult(metadata={"status": "skipped_network_error", "file": file_name, "error": str(e)})
+            return MaterializeResult(
+                metadata={
+                    "status": "skipped_network_error",
+                    "file": file_name,
+                    "error": str(e),
+                }
+            )
 
         context.log.info(f"Parsing {xml_path}")
         all_articles = list(parse_xml_file(xml_path, source_file=file_name))

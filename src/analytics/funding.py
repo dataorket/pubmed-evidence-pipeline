@@ -15,7 +15,13 @@ def funding_landscape(session: Session) -> list[dict]:
         .all()
     )
 
-    by_agency: dict[str, dict] = defaultdict(lambda: {"article_count": 0, "country": None, "years": []})
+    by_agency: dict[str, dict] = defaultdict(
+        lambda: {
+            "article_count": 0,
+            "country": None,
+            "years": [],
+        }
+    )
     for agency, country, pub_date in rows:
         a = agency.strip()
         if not a:
