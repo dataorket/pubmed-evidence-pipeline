@@ -289,37 +289,40 @@ Below are the main analytics pages available in the Streamlit dashboard, each wi
 7. **Funding Landscape**
 
 
+
 Screenshots for each page are shown below.
 
-**1. Publication Trends**
-<!-- Add the correct screenshot filename here -->
-![Publication Trends](Screenshot%202026-05-20%20at%2012.44.48.png)
-
-**2. Treatment-Outcome Matrix (with data)**
+### 1.1 Treatment-Outcome Matrix (with data)
 ![Treatment-Outcome Matrix with data](Screenshot%202026-05-20%20at%2013.53.01.png)
+_Shows the Treatment-Outcome Matrix fully populated with extracted analytics when the pipeline and LLM extraction have succeeded._
 
-**2b. Treatment-Outcome Matrix (no data)**
+### 1.2 Treatment-Outcome Matrix (no data)
 ![Treatment-Outcome Matrix with no data](Screenshot%202026-05-20%20at%2012.44.36.png)
+_Shows the dashboard state when no data is available—this occurs if the pipeline has not been run or if LLM extraction was not possible (e.g., due to quota limits)._
 
-**3. Knowledge Graph**
-<!-- Add the correct screenshot filename here -->
-![Knowledge Graph](Screenshot%202026-05-20%20at%2012.45.12.png)
+### 2. Publication Trends
+![Publication Trends](Screenshot%202026-05-20%20at%2012.44.48.png)
+_Shows the number and distribution of endometriosis-related publications over time, helping identify research activity and trends in the field._
 
-**4. Research Geography**
-<!-- Add the correct screenshot filename here -->
-![Research Geography](Screenshot%202026-05-20%20at%2012.45.39.png)
-
-**5. MeSH Network**
-<!-- Add the correct screenshot filename here -->
+### 3. MeSH Network
 ![MeSH Network](Screenshot%202026-05-20%20at%2012.45.12.png)
+_Displays a network of co-occurring MeSH terms, revealing thematic clusters and connections within the literature._
 
-**6. Study Design Trends**
-<!-- Add the correct screenshot filename here -->
-<!-- Screenshot missing or not yet provided -->
+### 4. Research Geography
+![Research Geography](Screenshot%202026-05-20%20at%2012.45.39.png)
+_Maps the geographic distribution of studies, showing which countries or regions are most active in endometriosis research._
 
-**7. Funding Landscape**
-<!-- Add the correct screenshot filename here -->
-<!-- Screenshot missing or not yet provided -->
+### 5. Knowledge Graph
+![Knowledge Graph](Screenshot%202026-05-20%20at%2012.45.12.png)
+_Visualizes relationships between treatments, outcomes, and other biomedical entities, enabling exploration of the evidence network for endometriosis._
+
+### 6. Population Profile
+![Population Profile](Screenshot%202026-05-20%20at%2012.45.58.png)
+_Summarizes the demographic and clinical characteristics of study populations, such as sex, age group, disease stage, and special populations, providing context for interpreting the evidence landscape._
+
+### 7. Funding Landscape
+![Funding Landscape](Screenshot%202026-05-20%20at%2012.46.23.png)
+_Analyzes funding sources and patterns, highlighting the organizations and grants supporting endometriosis research._
 
 - **Treatment-Outcome Matrix (with data, quota available)**
   ![Treatment-Outcome Matrix with data](Screenshot%202026-05-20%20at%2013.53.01.png)
