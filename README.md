@@ -255,33 +255,41 @@ Below are screenshots illustrating key pipeline and asset orchestration stages i
 
 - Asset materialization:
   ![Dagster asset materialization](Screenshot%202026-05-20%20at%2012.41.49.png)
+  *Materialization of a partitioned asset in Dagster, showing successful ingestion of a PubMed XML file.*
 - Asset checks:
   ![Dagster asset checks](Screenshot%202026-05-20%20at%2012.44.48.png)
+  *Automated data quality checks running on ingested data, ensuring integrity before analytics or extraction.*
 - Asset dependencies:
   ![Dagster asset dependencies](Screenshot%202026-05-20%20at%2012.45.12.png)
+  *Visualization of asset dependencies, showing how ingestion, extraction, and analytics assets are orchestrated.*
 - Asset run success:
   ![Dagster asset run success](Screenshot%202026-05-20%20at%2012.45.39.png)
+  *A successful asset materialization run, with all steps completed and data available for downstream analytics.*
 - Asset run error (e.g., network or API failure):
   ![Dagster asset run error](Screenshot%202026-05-20%20at%2012.45.51.png)
+  *Example of a failed asset run due to network or API error, with error details for debugging.*
 - Asset run warning (e.g., partial data):
   ![Dagster asset run warning](Screenshot%202026-05-20%20at%2012.45.58.png)
+  *A run with warnings, such as partial data ingestion or recoverable issues, highlighted for review.*
 - Asset run info (e.g., metadata):
   ![Dagster asset run info](Screenshot%202026-05-20%20at%2012.46.23.png)
+  *Asset run metadata and logs, providing transparency into pipeline execution and data lineage.*
 
 ### Example: LLM Extraction Rate Limit and Long Run
 
 ![LLM extraction asset run taking over 10 hours and failing due to Gemini API rate limits](Screenshot%202026-05-20%20at%2012.31.59.png)
-
 *The `extracted_treatment_outcomes` asset can take over 10 hours or fail due to Gemini API free-tier rate limits (20 requests/day). This is an external limitation, not a pipeline bug. See the [Gemini API quota documentation](https://ai.google.dev/gemini-api/docs/rate-limits) for more details.*
 
 ## Streamlit Dashboard Analytics
 
 Below is a screenshot of the interactive Streamlit dashboard for analytics and evidence exploration:
 
-- With data loaded:
+- **With data loaded (LLM extraction succeeded, within free-tier quota):**
   ![Streamlit dashboard analytics](Screenshot%202026-05-20%20at%2013.53.01.png)
-- Without data (dashboard will prompt to ingest and materialize assets first):
-  *(Add a screenshot here if available)*
+  *This page shows real analytics results, including treatment-outcome pairs, study design trends, and evidence maps for endometriosis, as produced by the pipeline. These results are only available if LLM extraction completes successfully and the Gemini API free-tier quota is not exceeded.*
+
+- **Without data (LLM extraction failed or quota exceeded):**
+  *If the Gemini API free-tier quota is exceeded or LLM extraction fails, the dashboard will prompt you to ingest and materialize assets first, and analytics will not be available. Add a screenshot here if available.*
 
 ## Continuous Integration & Quality Checks
 
