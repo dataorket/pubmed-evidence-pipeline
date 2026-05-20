@@ -121,8 +121,12 @@ elif page == "Knowledge Graph":
     if not data:
         st.warning("No data yet — run the pipeline first.")
     else:
-        nodes = data.get("nodes", [])
-        links = data.get("links", data.get("edges", []))
+        if isinstance(data, dict):
+            nodes = data.get("nodes", [])
+            links = data.get("links", data.get("edges", []))
+        else:
+            nodes = []
+            links = []
         st.metric("Nodes", len(nodes))
         st.metric("Edges", len(links))
         df_links = pd.DataFrame(links)
