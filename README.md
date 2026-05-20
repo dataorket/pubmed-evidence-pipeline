@@ -1,8 +1,13 @@
 # Endometriosis Treatment Evidence Pipeline — Solution
 
+
 ## Overview
 
 This repository contains a fully reproducible, orchestrated pipeline for mapping the treatment evidence landscape for **endometriosis** using PubMed abstracts. The pipeline is built with Dagster, Docker Compose, and Streamlit, and demonstrates robust ingestion, analytics, and LLM-powered extraction (with clear limitations for free-tier LLMs).
+
+## Architecture and Data Flow
+
+![Architecture & Data Flow](assets/architecture.png)
 
 
 ## Quick Start
