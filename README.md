@@ -1,3 +1,97 @@
+# Endometriosis Treatment Evidence Pipeline — Solution
+
+## Overview
+
+This repository contains a fully reproducible, orchestrated pipeline for mapping the treatment evidence landscape for **endometriosis** using PubMed abstracts. The pipeline is built with Dagster, Docker Compose, and Streamlit, and demonstrates robust ingestion, analytics, and LLM-powered extraction (with clear limitations for free-tier LLMs).
+
+
+## Quick Start
+
+```sh
+# 1. Copy and fill in credentials
+cp .env.example .env
+# edit .env: set GEMINI_API_KEY
+
+# 2. Start the full stack
+docker compose up
+
+# 3. Open Dagster UI — seed partitions, then materialize assets
+open http://localhost:3000
+
+# 4. View the dashboard
+open http://localhost:8501
+```
+
+> **Local development (without Docker):**
+> ```sh
+> uv sync
+> source .venv/bin/activate
+> export DAGSTER_HOME="$PWD"
+> export DATABASE_URL="postgresql://pubmed:pubmed@localhost:5432/pubmed_pipeline"
+> dagster dev          # http://localhost:3000
+> streamlit run src/web/app.py   # http://localhost:8501
+> ```
+
+
+## Condition Choice: Endometriosis
+
+
+Endometriosis was chosen as the target condition for this pipeline because:
+
+- It is a highly prevalent, under-researched chronic disease affecting millions of women worldwide.
+- The treatment landscape is complex, spanning hormonal therapies, surgical interventions, and emerging biologics—making it ideal for evidence mapping and analytics.
+- Endometriosis is often underrepresented in research relative to its disease burden, so mapping the evidence landscape has real clinical value.
+- PubMed contains a rich set of abstracts on endometriosis, enabling meaningful analytics and LLM-powered extraction.
+
+The pipeline filters PubMed records using both MeSH terms and keyword matching for high recall and precision.
+
+
+## Architecture
+
+```
+PubMed FTP (XML.gz)
+    │
+    ▼
+┌─────────────────────┐
+│  Ingestion Assets   │  download → verify MD5 → parse XML → filter → PostgreSQL
+│  (src/ingest/)      │  partitioned: one Dagster partition per .xml.gz file
+└────────┬────────────┘
+     │
+     ▼
+┌─────────────────────┐
+│  Extraction Asset   │  abstract text → Gemini → structured JSON → PostgreSQL
+│  (src/llm/)         │
+└────────┬────────────┘
+     │
+     ▼
+┌─────────────────────┐
+│  Analytics Assets   │  8 analytics: 4 LLM-powered + 4 metadata-powered
+│  (src/analytics/)   │
+└────────┬────────────┘
+     │
+     ▼
+┌─────────────────────┐
+│  Streamlit Dashboard│  7-page interactive dashboard
+│  (src/web/app.py)   │
+└─────────────────────┘
+```
+
+
+### Asset Dependency Graph
+
+```
+filtered_articles (partitioned: 1 per file)
+│
+├── publication_trend_analysis
+├── mesh_cooccurrence_network
+├── research_geography_analysis
+└── funding_landscape_analysis
+
+extracted_treatment_outcomes
+└── knowledge_graph_data
+```
+
+
 ## Sample Query & Analytics Results
 
 ### LLM Extraction Success & Failure: Queries and Results
@@ -153,158 +247,35 @@ Below are real examples of articles with successful LLM extraction, showing the 
      "extracted_ts": "2026-05-20 04:09:22"
 }
 ```
-# Endometriosis Treatment Evidence Pipeline — Solution
 
-## Overview
+## Continuous Integration & Quality Checks
 
-This repository contains a fully reproducible, orchestrated pipeline for mapping the treatment evidence landscape for **endometriosis** using PubMed abstracts. The pipeline is built with Dagster, Docker Compose, and Streamlit, and demonstrates robust ingestion, analytics, and LLM-powered extraction (with clear limitations for free-tier LLMs).
+This project uses GitHub Actions for continuous integration (CI) to ensure code quality and reliability. On every push and pull request to `main`, the following checks are automatically run:
 
+- **Linting:** Enforced with [Ruff](https://github.com/astral-sh/ruff) to maintain consistent code style.
+- **Type Checking:** Enforced with [mypy](http://mypy-lang.org/) to catch type errors early.
+- **Testing:** All unit and integration tests are run with [pytest](https://docs.pytest.org/).
+- **Data Quality Checks:** Dagster asset checks are executed to validate data integrity and pipeline health.
 
-## Quick Start
+You can find the workflow definition in `.github/workflows/ci.yml`.
 
-```sh
-# 1. Copy and fill in credentials
-cp .env.example .env
-# edit .env: set GEMINI_API_KEY
+### Running Checks Locally
 
-# 2. Start the full stack
-docker compose up
+To run the same checks locally before pushing:
 
-# 3. Open Dagster UI — seed partitions, then materialize assets
-open http://localhost:3000
+```bash
+# Linting
+ruff check src/ tests/
 
-# 4. View the dashboard
-open http://localhost:8501
+# Type checking
+mypy src/ tests/
+
+# Run tests
+pytest
+
+# Run Dagster data quality checks
+python src/dagster_pipeline/checks.py
 ```
-
-> **Local development (without Docker):**
-> ```sh
-> uv sync
-> source .venv/bin/activate
-> export DAGSTER_HOME="$PWD"
-> export DATABASE_URL="postgresql://pubmed:pubmed@localhost:5432/pubmed_pipeline"
-> dagster dev          # http://localhost:3000
-> streamlit run src/web/app.py   # http://localhost:8501
-> ```
-
-
-## Condition Choice: Endometriosis
-
-Endometriosis is a highly prevalent, under-researched chronic condition. The pipeline filters PubMed records using both MeSH terms and keyword matching for high recall and precision.
-
-
-## Architecture
-
-```
-PubMed FTP (XML.gz)
-    │
-    ▼
-┌─────────────────────┐
-│  Ingestion Assets   │  download → verify MD5 → parse XML → filter → PostgreSQL
-│  (src/ingest/)      │  partitioned: one Dagster partition per .xml.gz file
-└────────┬────────────┘
-     │
-     ▼
-┌─────────────────────┐
-│  Extraction Asset   │  abstract text → Gemini → structured JSON → PostgreSQL
-│  (src/llm/)         │
-└────────┬────────────┘
-     │
-     ▼
-┌─────────────────────┐
-│  Analytics Assets   │  8 analytics: 4 LLM-powered + 4 metadata-powered
-│  (src/analytics/)   │
-└────────┬────────────┘
-     │
-     ▼
-┌─────────────────────┐
-│  Streamlit Dashboard│  7-page interactive dashboard
-│  (src/web/app.py)   │
-└─────────────────────┘
-```
-
-
-### Asset Dependency Graph
-
-```
-filtered_articles (partitioned: 1 per file)
-│
-├── publication_trend_analysis
-├── mesh_cooccurrence_network
-├── research_geography_analysis
-└── funding_landscape_analysis
-
-extracted_treatment_outcomes
-└── knowledge_graph_data
-```
-
-
-#### Streamlit Dashboard Analytics
-
-**Treatment-Outcome Matrix**
-
-![Treatment-Outcome Matrix: Example with data](Screenshot%202026-05-20%20at%2013.53.01.png)
-
-*Treatment-Outcome Matrix: Example with data populated after a successful LLM extraction run. This screenshot demonstrates that the pipeline can produce LLM-powered analytics when quota is available. If rate-limited, this page may show 'No data yet'.*
-
-**Publication Trends Over Time**
-
-![Publication Trends Over Time](Screenshot%202026-05-20%20at%2012.44.48.png)
-
-
-**MeSH Term Co-occurrence Network**
-
-![MeSH Term Co-occurrence Network](Screenshot%202026-05-20%20at%2012.45.12.png)
-
-*MeSH Term Co-occurrence Network: Visualizes the subtopic structure and research clusters for endometriosis.*
-
-**Research Geography**
-
-![Research Geography](Screenshot%202026-05-20%20at%2012.45.39.png)
-
-*Research Geography: Article count by country, showing global research distribution for endometriosis.*
-
-**Knowledge Graph**
-
-![Treatment-Outcome Knowledge Graph: No data yet — run the pipeline first.](Screenshot%202026-05-20%20at%2012.45.51.png)
-
-*The Treatment-Outcome Knowledge Graph page shows 'No data yet' because LLM-powered extraction is rate-limited on the free Gemini API tier.*
-
-**Population Profile**
-
-![Patient Population Profile: No data yet — run the pipeline first.](Screenshot%202026-05-20%20at%2012.45.58.png)
-
-*The Patient Population Profile page shows 'No data yet' because LLM-powered extraction is rate-limited on the free Gemini API tier.*
-
-**Funding Landscape**
-
-![Funding Landscape](Screenshot%202026-05-20%20at%2012.46.23.png)
-
-*Funding Landscape: Top funding agencies by article count, fully materialized and visualized.*
-
-### Demonstrated Analytics (with screenshots)
-
-![Dagster asset catalog showing materialized and non-materialized assets](Screenshot%202026-05-20%20at%2012.41.49.png)
-
-*Dagster asset catalog showing all 10 partitions of `filtered_articles` and all metadata-powered analytics (`funding_landscape_analysis`, `research_geography_analysis`, `mesh_cooccurrence_network`, `publication_trend_analysis`) successfully materialized. LLM-powered analytics (`extracted_treatment_outcomes`, `knowledge_graph_data`, `patient_population_profiling`, `study_design_trends`, `treatment_outcome_matrix`) are not materialized due to Gemini API rate limits. The `extracted_treatment_outcomes` asset is currently running, illustrating the impact of LLM rate limits on pipeline throughput.*
-
-These analytics are fully reproducible and can be validated with the provided Docker Compose setup or local run instructions.
-
-### LLM Extraction Limitation
-
-
-**This limitation is documented and expected for LLM-powered pipelines on free-tier APIs.**
-
-
-## How to Reproduce
-
-1. Clone the repo and copy `.env.example` to `.env`. Add your Gemini API key.
-2. Run `docker compose up` and wait for all services to become healthy.
-3. Open Dagster UI (http://localhost:3000), seed partitions, and materialize assets in order:
-   - `filtered_articles` (all partitions)
-   - Metadata-powered analytics (see above)
-   - (Optional) LLM extraction and downstream analytics if you have API quota
-4. Open Streamlit dashboard (http://localhost:8501) to view results.
 
 
 ## Known Issues & Next Steps
