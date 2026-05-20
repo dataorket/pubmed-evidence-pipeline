@@ -68,17 +68,19 @@ PubMed FTP (XML.gz)
 └─────────────────────┘
 ```
 
+
 ### Asset Dependency Graph
 
+```
 filtered_articles (partitioned: 1 per file)
-  │                          ├── publication_trend_analysis
-  │                          ├── mesh_cooccurrence_network
-  │                          ├── research_geography_analysis
-  │                          └── funding_landscape_analysis
-  │
+│
+├── publication_trend_analysis
+├── mesh_cooccurrence_network
+├── research_geography_analysis
+└── funding_landscape_analysis
+
 extracted_treatment_outcomes
-  │
-  └── knowledge_graph_data
+└── knowledge_graph_data
 ```
 
 
@@ -160,9 +162,6 @@ These analytics are fully reproducible and can be validated with the provided Do
 *The `extracted_treatment_outcomes` asset can take over 10 hours or fail due to Gemini API free-tier rate limits (20 requests/day). This is an external limitation, not a pipeline bug. See the [Gemini API quota documentation](https://ai.google.dev/gemini-api/docs/rate-limits) for more details.*
 
 
-## Contact
-
-For questions or a demo, contact [your name/email].
 
 Please do **not** add comments to your code unless they are strictly necessary to explain non-obvious behavior, hidden invariants, or workarounds. Clear names, small functions, and obvious structure are preferred over narrative comments. Reviewers should be able to read the code without inline explanations.
 
