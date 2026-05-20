@@ -252,8 +252,13 @@ Below are real examples of articles with successful LLM extraction, showing the 
 
 ### Dagster / Streamlit UI: Asset Orchestration & Monitoring
 
+Below are the two key screenshots illustrating pipeline orchestration and LLM extraction limitations:
+
+![LLM extraction asset run taking over 10 hours and failing due to Gemini API rate limits](Screenshot%202026-05-20%20at%2012.31.59.png)
 
 *The `extracted_treatment_outcomes` asset can take over 10 hours or fail due to Gemini API free-tier rate limits (20 requests/day). This is an external limitation, not a pipeline bug. See the [Gemini API quota documentation](https://ai.google.dev/gemini-api/docs/rate-limits) for more details.*
+
+![Dagster asset materialization](Screenshot%202026-05-20%20at%2012.41.49.png)
 
 
 
