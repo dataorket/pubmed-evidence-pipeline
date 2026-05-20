@@ -248,6 +248,24 @@ Below are real examples of articles with successful LLM extraction, showing the 
 }
 ```
 
+## Pipeline Orchestration: Dagster UI
+
+Below are screenshots illustrating key pipeline and asset orchestration stages in Dagster:
+
+![Dagster asset materialization](Screenshot%202026-05-20%20at%2012.41.49.png)
+![Dagster asset checks](Screenshot%202026-05-20%20at%2012.44.48.png)
+![Dagster asset dependencies](Screenshot%202026-05-20%20at%2012.45.12.png)
+![Dagster asset run success](Screenshot%202026-05-20%20at%2012.45.39.png)
+![Dagster asset run error](Screenshot%202026-05-20%20at%2012.45.51.png)
+![Dagster asset run warning](Screenshot%202026-05-20%20at%2012.45.58.png)
+![Dagster asset run info](Screenshot%202026-05-20%20at%2012.46.23.png)
+
+## Streamlit Dashboard Analytics
+
+Below is a screenshot of the interactive Streamlit dashboard for analytics and evidence exploration:
+
+![Streamlit dashboard analytics](Screenshot%202026-05-20%20at%2013.53.01.png)
+
 ## Known Issues & Next Steps
 
 ### Example: LLM Extraction Rate Limit and Long Run
@@ -284,20 +302,6 @@ pytest
 # Run Dagster data quality checks
 python src/dagster_pipeline/checks.py
 ```
-
-
-## Analytics & Pipeline Screenshots
-
-Below are screenshots illustrating key pipeline and analytics stages:
-
-![Dagster asset materialization](Screenshot%202026-05-20%20at%2012.41.49.png)
-![Dagster asset checks](Screenshot%202026-05-20%20at%2012.44.48.png)
-![Dagster asset dependencies](Screenshot%202026-05-20%20at%2012.45.12.png)
-![Dagster asset run success](Screenshot%202026-05-20%20at%2012.45.39.png)
-![Dagster asset run error](Screenshot%202026-05-20%20at%2012.45.51.png)
-![Dagster asset run warning](Screenshot%202026-05-20%20at%2012.45.58.png)
-![Dagster asset run info](Screenshot%202026-05-20%20at%2012.46.23.png)
-![Streamlit dashboard analytics](Screenshot%202026-05-20%20at%2013.53.01.png)
 
 
 
