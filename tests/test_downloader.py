@@ -6,8 +6,8 @@ from src.ingest.downloader import baseline_file_name, verify_md5
 
 
 def test_baseline_file_name():
-    assert baseline_file_name(1138) == "pubmed25n1138.xml.gz"
-    assert baseline_file_name(1) == "pubmed25n0001.xml.gz"
+    assert baseline_file_name(1138) == "pubmed26n1138.xml.gz"
+    assert baseline_file_name(1) == "pubmed26n0001.xml.gz"
 
 
 def test_verify_md5_correct(tmp_path: Path):
