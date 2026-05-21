@@ -156,7 +156,19 @@ Below is an example of a failed LLM extraction (filtered out due to error or emp
 *Rows like this are excluded from downstream analytics and dashboard visualizations, but are tracked for transparency and debugging.*
 
 
-### Pipeline State Example
+
+**Query for Pipeline State Example:**
+```sql
+SELECT
+     (SELECT COUNT(*) FROM pubmed_article) AS total_articles,
+     (SELECT COUNT(*) FROM llm_extraction
+           WHERE (extraction_error IS NULL OR extraction_error = '')
+                AND treatment_outcomes IS NOT NULL
+                AND treatment_outcomes::text != '[]') AS llm_extraction_success,
+     (SELECT COUNT(*) FROM llm_extraction
+           WHERE extraction_error IS NOT NULL AND extraction_error != '') AS llm_extraction_errors,
+     (SELECT COUNT(*) FROM analytics_result) AS analytics_results;
+```
 
 | Table                    | Count |
 |--------------------------|-------|
@@ -165,7 +177,33 @@ Below is an example of a failed LLM extraction (filtered out due to error or emp
 | llm_extraction (errors)  | 138   |
 | analytics_result         | 4     |
 
-### Analytics Output Summary
+
+**Query for Analytics Output Summary:**
+```sql
+SELECT
+     -- Unique treatment-outcome pairs
+     (SELECT COUNT(*) FROM (
+          SELECT DISTINCT (treatment_outcome->>'treatment'), (treatment_outcome->>'outcome')
+          FROM llm_extraction, jsonb_array_elements(treatment_outcomes) AS treatment_outcome
+          WHERE (extraction_error IS NULL OR extraction_error = '')
+               AND treatment_outcomes IS NOT NULL
+               AND treatment_outcomes::text != '[]'
+     ) AS unique_pairs) AS treatment_outcome_pairs,
+
+     -- Years of data
+     (SELECT (EXTRACT(YEAR FROM MAX(pub_date)) - EXTRACT(YEAR FROM MIN(pub_date)) + 1)
+      FROM pubmed_article) AS years_of_data,
+
+     -- MeSH co-occurrence pairs
+     (SELECT jsonb_array_length(payload)
+      FROM analytics_result
+      WHERE name = 'mesh_cooccurrence_network') AS mesh_cooccurrence_pairs,
+
+     -- Unique countries
+     (SELECT COUNT(DISTINCT country)
+      FROM pubmed_author
+      WHERE country IS NOT NULL) AS unique_countries;
+```
 
 ```
 ✓ 120 treatment-outcome pairs
@@ -177,9 +215,34 @@ Below is an example of a failed LLM extraction (filtered out due to error or emp
 ```
 
 
+
 ### End-to-End Extraction Example
 
 Below are real examples of articles with successful LLM extraction, showing the article metadata and the structured treatment-outcome relationships:
+
+**Query for End-to-End Extraction Example:**
+```sql
+SELECT
+     e.id,
+     e.pubmed_id,
+     a.title,
+     a.journal,
+     a.pub_date,
+     e.treatments,
+     e.outcomes,
+     e.treatment_outcomes,
+     e.study_design,
+     e.population,
+     e.extraction_confidence,
+     e.extracted_ts
+FROM llm_extraction e
+JOIN pubmed_article a ON e.pubmed_id = a.pubmed_id
+WHERE (e.extraction_error IS NULL OR e.extraction_error = '')
+     AND e.treatment_outcomes IS NOT NULL
+     AND e.treatment_outcomes::text != '[]'
+ORDER BY e.id
+LIMIT 3;
+```
 
 ```json
 {
