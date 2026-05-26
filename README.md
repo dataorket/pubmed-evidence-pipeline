@@ -322,11 +322,11 @@ LIMIT 3;
 
 Below are the two key screenshots illustrating pipeline orchestration and LLM extraction limitations:
 
-![LLM extraction asset run taking over 10 hours and failing due to Gemini API rate limits](Screenshot%202026-05-20%20at%2012.31.59.png)
+![LLM extraction asset run taking over 10 hours and failing due to Gemini API rate limits](assets/old/Screenshot 2026-05-20 at 12.31.59.png)
 
 *The `extracted_treatment_outcomes` asset can take over 10 hours or fail due to Gemini API free-tier rate limits (20 requests/day). This is an external limitation, not a pipeline bug. See the [Gemini API quota documentation](https://ai.google.dev/gemini-api/docs/rate-limits) for more details.*
 
-![Dagster asset materialization](Screenshot%202026-05-20%20at%2012.41.49.png)
+![Dagster asset materialization](assets/old/Screenshot 2026-05-20 at 12.41.49.png)
 
 
 
@@ -363,7 +363,7 @@ Screenshots for each page are shown below.
 _Shows the Treatment-Outcome Matrix fully populated with extracted analytics when the pipeline and LLM extraction have succeeded._
 
 ### 1.2 Treatment-Outcome Matrix (no data)
-![Treatment-Outcome Matrix with no data](Screenshot%202026-05-20%20at%2012.44.36.png)
+
 _Shows the dashboard state when no data is available—this occurs if the pipeline has not been run or if LLM extraction was not possible (e.g., due to quota limits)._ 
 
 
@@ -443,7 +443,7 @@ python src/dagster_pipeline/checks_run_extra.py
 
 Below is a screenshot of the GitHub Actions CI/CD pipeline, showing successful and failed runs for data quality and code checks:
 
-![CI/CD Actions Run Example](Screenshot%202026-05-20%20at%2022.49.53.png)
+![CI/CD Actions Run Example](assets/old/Screenshot 2026-05-20 at 22.49.53.png)
 
 **What is tested:**
 - No duplicate PubMed IDs (`pubmed_article.pubmed_id` uniqueness)
