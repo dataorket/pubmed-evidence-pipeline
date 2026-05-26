@@ -444,7 +444,7 @@ python src/dagster_pipeline/checks_run_extra.py
 
 Below is a screenshot of the GitHub Actions CI/CD pipeline, showing successful and failed runs for data quality and code checks:
 
-![CI/CD Actions Run Example](assets/old/Screenshot 2026-05-20 at 22.49.53.png)
+![CI/CD Actions Run Example](assets/old/ci_cd_actions_run_example.png)
 
 **What is tested:**
 - No duplicate PubMed IDs (`pubmed_article.pubmed_id` uniqueness)
