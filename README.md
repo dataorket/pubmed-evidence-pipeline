@@ -362,8 +362,9 @@ Screenshots for each page are shown below.
 ![Treatment-Outcome Matrix with data](assets/treatment_outcome.png)
 _Shows the Treatment-Outcome Matrix fully populated with extracted analytics when the pipeline and LLM extraction have succeeded._
 
-### 1.2 Treatment-Outcome Matrix (no data)
 
+### 1.2 Treatment-Outcome Matrix (no data)
+![Treatment-Outcome Matrix with no data](assets/old/Screenshot 2026-05-20 at 12.44.36.png)
 _Shows the dashboard state when no data is available—this occurs if the pipeline has not been run or if LLM extraction was not possible (e.g., due to quota limits)._ 
 
 
