@@ -456,6 +456,33 @@ Below is a screenshot of the GitHub Actions CI/CD pipeline, showing successful a
 
 These checks are enforced automatically on every push and pull request via GitHub Actions, ensuring robust data quality and code reliability.
 
+---
+
+## 📊 New Analytics Visualizations & Automation
+
+### Treatment Paradigm Shifts
+This analytic tracks the evolution of treatment mentions by year, combining LLM-extracted treatments with publication metadata.
+
+![Treatment Paradigm Shifts](assets/Treatment%20Paradigm%20Shift.png)
+
+### Evidence Gap Detection
+This analytic highlights treatments with many case reports but few or no RCTs, helping to identify evidence gaps in the literature.
+
+![Evidence Gap Detection](assets/Evidence%20Gap%20Detection.png)
+
+---
+
+### ⚡️ Incremental Partition Auto-Registration
+
+The pipeline includes an **incremental auto-load sensor** that automatically discovers and registers new PubMed baseline file partitions as they appear in the FTP source. This ensures that new data is ingested and processed without manual intervention.
+
+- The sensor runs periodically, checks for new files, and registers any missing partitions in Dagster.
+- This enables fully automated, idempotent ingestion and analytics for new PubMed data drops.
+
+**How it works:**
+- See `src/dagster_pipeline/sensors/pubmed_partition_sensor.py` for implementation.
+- The sensor is registered in `src/dagster_pipeline/definitions.py` and runs as part of the Dagster deployment (including Docker Compose).
+
 
 
 
